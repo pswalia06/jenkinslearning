@@ -1,11 +1,20 @@
 pipeline {
   agent any
+
+  environment {
+    DEMO = '1.3'
+  }
+
   stages {
     stage('Stage 1') {
       steps {
-        echo 'This is my build number $BUILD_NUMBER'
-        sh 'echo "This is by build number $BUILD_NUMBER of demo $DEMO "'
-        sh 'echo "This is second build $DEMO" '
+        echo "This is my build number $BUILD_NUMBER and the $DEMO "
+        sh '''
+        echo "using the multiline code"
+        chmod +x test.sh
+        ./test.sh
+        '''
+
       }
     }
 
