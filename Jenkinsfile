@@ -46,13 +46,13 @@ pipeline {
                success {
                    archiveArtifacts 'test-results.txt'
                     slackSend(
-                       channel: "#Builds",
+                       channel: 'jenkins',
                        color:   "good",
                        message: "build status success -  ${env.BUILD_NUMBER} ")
                }
                failure {
                     slackSend(
-                       channel: "#Builds",
+                       channel: 'jenkins',
                        color: "danger",
                         message: "build status failure -  ${env.BUILD_NUMBER} ")
                 }
