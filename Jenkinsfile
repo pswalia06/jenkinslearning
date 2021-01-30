@@ -1,13 +1,24 @@
 pipeline {
   agent any
 
- environment {
+ environment
+    {
         DEMO = '1.3'
+        RELEASE = '20.4'
     }
 
-  stages {
-    stage('Stage 1') {
-      steps {
+  stages
+  {
+    stage('Build')
+    {
+      agent any
+      environment
+      {
+         LOG_LEVEL = 'INFO'
+       }
+
+      steps
+      {
         echo "This is my build number $BUILD_NUMBER and the $DEMO "
         sh '''
         echo "using the multiline code"
@@ -16,5 +27,12 @@ pipeline {
         '''
       }
     }
- }
+    stage('Test')
+        {
+          agent any
+          steps
+          {
+            echo "This is my Test number $BUILD_NUMBER and the $DEMO "
+          }
+        }
 }
