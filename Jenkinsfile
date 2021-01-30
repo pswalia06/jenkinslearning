@@ -16,27 +16,16 @@ pipeline {
                 LOG_LEVEL = "INFO"
             }
 
-            parallel {
-                stage("linux-arm64"){
-                    steps {
-                        echo "Building release ${RELEASE} for ${LOG_LEVEL} with ${STAGE_NAME}"
-                    }
-                }
-
-                stage("linux-amd64"){
-                    steps {
-                        echo "Building release ${RELEASE} for ${LOG_LEVEL} with ${STAGE_NAME}"
-                    }
-                }
-
-                stage("Window-amd64"){
-                    steps {
-                        echo "Building release ${RELEASE} for ${LOG_LEVEL} with ${STAGE_NAME}"
-                    }
+            steps {
+                echo "Building release ${RELEASE} with log level ${LOG_LEVEL}"
+                sh ' chmod +x test.sh'
+                withCredentials([string(credentialsID: 'Slacktoken' , varaible: 'Slacktoken')]) {
+                sh '''
+                    ./test.sh
+                    '''
                 }
             }
         }
-
         stage('Test')
         {
             steps 
@@ -50,6 +39,8 @@ pipeline {
     post {
         success {
             archiveArtifacts 'test-results.txt'
+            slackSend channel: '#builds',
+                      message: "Release ${env.RELEASE}, success: ${currentBuild.fullDisplayName}."
         }
     }
 }
