@@ -28,19 +28,34 @@ pipeline {
         }
         stage('Test')
         {
-            steps 
+            steps
             {
-                echo "This is my Test number $BUILD_NUMBER and the $DEMO and $RELEASE "
-                writeFile file: 'test-results.txt', text:'passed'
-             }
-        }
-        stage('Send Notification') {
-                    steps {
-                        script {
-                            def color = "${params.MESSAGE_STATUS}" == "GOOD"? "good" : "warning"
-                            slackSend(color: "${color}", message: "build status -  ${env.BUILD_NUMBER} ", channel: 'jenkins')
-                        }
+                echo "Testing Release ${RELEASE}"
+                script
+                {
+                    if (Math.random() > 0.5)
+                    {
+                      throw new Exception()
                     }
                 }
-    }
+              writeFile file: 'test-results.txt', text:'passed'
+            }
+         }
+      }
+       post {
+               success {
+                   archiveArtifacts 'test-results.txt'
+                    slackSend(
+                                           channel: "#Builds",
+                                           color: "good",
+                                           message: "Release ${env.RELEASE}, success: ${currentBuild.fullDisplayName} ")
+               }
+               failure {
+
+                                   slackSend(
+                                                          channel: "#Builds",
+                                                          color: "danger",
+                                                          message: "Release ${env.RELEASE}, success: ${currentBuild.fullDisplayName} ")
+                              }
+           }
 }
