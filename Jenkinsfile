@@ -1,38 +1,36 @@
 pipeline {
-  agent any
+    agent any
 
- environment
+    environment 
     {
-        DEMO = '1.3'
-        RELEASE = '20.4'
+        DEMO = "1.3"
+        RELEASE = "20.4"
     }
 
-  stages
-  {
-    stage('Build')
+    stages 
     {
-      agent any
-      environment
-      {
-         LOG_LEVEL = 'INFO'
-       }
-
-      steps
-      {
-        echo "This is my build number $BUILD_NUMBER and the $DEMO "
-        sh '''
-        echo "using the multiline code"
-        chmod +x test.sh
-        ./test.sh
-        '''
-      }
-    }
-    stage('Test')
+        stage("Build")
         {
-          agent any
-          steps
-          {
-            echo "This is my Test number $BUILD_NUMBER and the $DEMO "
-          }
+            agent any
+            environment 
+            {
+                LOG_LEVEL = "INFO"
+            }
+
+            steps 
+            {
+                echo "This is my build number $BUILD_NUMBER and the $DEMO "
+                sh "\n        echo "using the multiline code"\n        chmod +x test.sh\n        ./test.sh\n        "
+            }
         }
+
+        stage("Test")
+        {
+            agent any
+            steps 
+            {
+                echo "This is my Test number $BUILD_NUMBER and the $DEMO "
+            }
+        }
+    }
 }
