@@ -17,9 +17,24 @@ pipeline {
                 LOG_LEVEL = "INFO"
             }
 
-            steps 
-            {
-                echo "This is my build number $BUILD_NUMBER and the $DEMO and $LOG_LEVEL "
+            parallel {
+                stage("linux-arm64"){
+                    steps {
+                        echo "Building release ${RELEASE} for ${LOG_LEVEL} with ${STAGE_NAME}"
+                    }
+                }
+
+                stage("linux-amd64"){
+                    steps {
+                        echo "Building release ${RELEASE} for ${LOG_LEVEL} with ${STAGE_NAME}"
+                    }
+                }
+
+                stage("Window-amd64"){
+                    steps {
+                        echo "Building release ${RELEASE} for ${LOG_LEVEL} with ${STAGE_NAME}"
+                    }
+                }
             }
         }
 
