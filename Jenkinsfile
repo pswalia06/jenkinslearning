@@ -37,19 +37,19 @@ pipeline {
             }
         }
 
-        stage("Test")
+        stage('Test')
         {
             steps 
             {
                 echo "This is my Test number $BUILD_NUMBER and the $DEMO and $RELEASE "
-                writeFile file:test-results.txt, text:passed
-            }
+                writeFile file: 'test-results.txt', text:'passed'
+             }
         }
     }
 
     post {
         success {
-            archiveArtifacts "test-results.txt"
+            archiveArtifacts 'test-results.txt'
         }
     }
 }
