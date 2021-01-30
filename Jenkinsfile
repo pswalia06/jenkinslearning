@@ -1,9 +1,9 @@
 pipeline {
   agent any
 
-  environment {
-    DEMO = '1.3'
-  }
+ environment {
+        DEMO = '1.3'
+    }
 
   stages {
     stage('Stage 1') {
@@ -14,12 +14,7 @@ pipeline {
         chmod +x test.sh
         ./test.sh
         '''
-
       }
     }
-
-  }
-  environment {
-    demo = '1'
-  }
+ }
 }
