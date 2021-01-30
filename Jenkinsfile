@@ -19,7 +19,7 @@ pipeline {
 
             steps 
             {
-                echo "This is my build number $BUILD_NUMBER and the $DEMO "
+                echo "This is my build number $BUILD_NUMBER and the $DEMO and $LOG_LEVEL "
             }
         }
 
