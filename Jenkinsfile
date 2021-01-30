@@ -19,7 +19,7 @@ pipeline {
             steps {
                 echo "Building release ${RELEASE} with log level ${LOG_LEVEL}"
                 sh ' chmod +x test.sh'
-                withCredentials([string(credentialsID: 'Slacktoken' , varaible: 'Slacktoken')]) {
+                withCredentials([string(credentialsId: 'Slacktoken' , variable: 'Slacktoken')]) {
                 sh '''
                     ./test.sh
                     '''
