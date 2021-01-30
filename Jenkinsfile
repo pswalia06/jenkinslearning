@@ -20,7 +20,6 @@ pipeline {
             steps 
             {
                 echo "This is my build number $BUILD_NUMBER and the $DEMO "
-                sh "\n        echo "using the multiline code"\n        chmod +x test.sh\n        ./test.sh\n        "
             }
         }
 
