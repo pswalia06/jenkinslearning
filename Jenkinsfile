@@ -34,13 +34,15 @@ pipeline {
                 writeFile file: 'test-results.txt', text:'passed'
              }
         }
-    }
-
-    post {
-        success {
-            archiveArtifacts 'test-results.txt'
-            slackSend channel: '#builds',
-                      message: "Release ${env.RELEASE}, success: ${currentBuild.fullDisplayName}."
-        }
+        stages {
+                stage('Send Notification') {
+                    steps {
+                        script {
+                            def color = "${params.MESSAGE_STATUS}" == "GOOD"? "good" : "warning"
+                            slackSend(color: "${color}", message: "${params.MESSAGE}", channel: "${params.CHANNEL}")
+                        }
+                    }
+                }
+            }
     }
 }

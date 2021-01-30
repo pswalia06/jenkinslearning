@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "Inside the script, demo $Slacktoken"
+echo "Inside the script, demo $SlackToken"
