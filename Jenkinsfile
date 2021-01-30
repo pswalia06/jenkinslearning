@@ -42,27 +42,14 @@ pipeline {
             steps 
             {
                 echo "This is my Test number $BUILD_NUMBER and the $DEMO and $RELEASE  "
-            }
-        }
-
-        stage("Deploy"){
-            input {
-                message "Deploy?"
-                ok "Do it !"
-                parameters {
-                    string(name:"TARGET_ENVIRONMENT", defaultValue:"PROD", description:"Target Deployment Environment")
-                }
-            }
-
-            steps {
-                echo "This is my Test number $BUILD_NUMBER and the $DEMO and $TARGET_ENVIRONMENT "
+                writeFile file:test-results.txt, text:passed
             }
         }
     }
 
     post {
-        always {
-            echo "print weather deploy or not"
+        success {
+            archiveArtifacts "test-results.txt"
         }
     }
 }
