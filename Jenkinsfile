@@ -34,8 +34,7 @@ pipeline {
                 writeFile file: 'test-results.txt', text:'passed'
              }
         }
-        stages {
-                stage('Send Notification') {
+        stage('Send Notification') {
                     steps {
                         script {
                             def color = "${params.MESSAGE_STATUS}" == "GOOD"? "good" : "warning"
@@ -43,6 +42,5 @@ pipeline {
                         }
                     }
                 }
-            }
     }
 }
