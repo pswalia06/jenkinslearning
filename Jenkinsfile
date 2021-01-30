@@ -38,7 +38,7 @@ pipeline {
                     steps {
                         script {
                             def color = "${params.MESSAGE_STATUS}" == "GOOD"? "good" : "warning"
-                            slackSend(color: "${color}", message: "build status - ${env.BRANCH} ${env.BUILD_NUMBER} ", channel: 'jenkins')
+                            slackSend(color: "${color}", message: "build status -  ${env.BUILD_NUMBER} ", channel: 'jenkins')
                         }
                     }
                 }
