@@ -41,7 +41,7 @@ pipeline {
         {
             steps 
             {
-                echo "This is my Test number $BUILD_NUMBER and the $DEMO and $RELEASE  "
+                echo "This is my Test number $BUILD_NUMBER and the $DEMO and $RELEASE "
                 writeFile file:test-results.txt, text:passed
             }
         }
