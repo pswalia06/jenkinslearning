@@ -25,7 +25,6 @@ pipeline {
 
         stage("Test")
         {
-            agent any
             steps 
             {
                 echo "This is my Test number $BUILD_NUMBER and the $DEMO and $RELEASE  "
@@ -39,10 +38,10 @@ pipeline {
                 parameters {
                     string(name:"TARGET_ENVIRONMENT", defaultValue:"PROD", description:"Target Deployment Environment")
                 }
+            }
 
-                steps {
-                    echo "This is my Test number $BUILD_NUMBER and the $DEMO and $RTARGET_ENVIRONMENT"
-                }
+            steps {
+                echo "This is my Test number $BUILD_NUMBER and the $DEMO and $TARGET_ENVIRONMENT "
             }
         }
     }
