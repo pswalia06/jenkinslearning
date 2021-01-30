@@ -48,7 +48,7 @@ pipeline {
 
     post {
         always {
-            echo "print wheatehr deploy or not"
+            echo "print weather deploy or not"
         }
     }
 }
