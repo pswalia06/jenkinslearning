@@ -1,60 +1,41 @@
 pipeline {
     agent any
-
-    environment 
-    {
-        DEMO = "1.3"
-        RELEASE = "20.4"
+    environment {
+        VERSION = "0.1.0"        
+        VERSION_RC = "rc.2"
     }
-
-    stages 
-    {
-        stage("Build")
-        {
-            environment 
-            {
-                LOG_LEVEL = "INFO"
-            }
-
+    stages {
+        stage('Audit tools') {                        
             steps {
-                echo "Building release ${RELEASE} with log level ${LOG_LEVEL}"
-                sh ' chmod +x test.sh'
-                withCredentials([string(credentialsId: 'SlackToken' , variable: 'SlackToken')]) {
                 sh '''
-                    ./test.sh
-                    '''
-                }
+                  git version
+                  docker version
+                  dotnet --list-sdks
+                  dotnet --list-runtimes
+                '''
             }
         }
-        stage('Test')
-        {
-            steps
-            {
-                echo "Testing Release ${RELEASE}"
-                script
-                {
-                    if (Math.random() > 0.5)
-                    {
-                      throw new Exception()
-                    }
-                }
-              writeFile file: 'test-results.txt', text:'passed'
+        stage('Build') {
+            steps {
+              echo "Building version: ${VERSION} with suffix: ${VERSION_RC}"
+              sh 'dotnet build -p:VersionPrefix="${VERSION}" --version-suffix "${VERSION_RC}" ./m3/src/Pi.Web/Pi.Web.csproj'
             }
-         }
-      }
-       post {
-               success {
-                   archiveArtifacts 'test-results.txt'
-                    slackSend(
-                       channel: 'jenkins',
-                       color:   "good",
-                       message: "build status success -  ${env.BUILD_NUMBER} ")
-               }
-               failure {
-                    slackSend(
-                       channel: 'jenkins',
-                       color: "danger",
-                        message: "build status failure -  ${env.BUILD_NUMBER} ")
-                }
-           }
+        }
+        stage('Unit Test') {
+            steps {
+              dir('./m3/src') {
+                sh '''
+                    dotnet test --logger "trx;LogFileName=Pi.Math.trx" Pi.Math.Tests/Pi.Math.Tests.csproj
+                    dotnet test --logger "trx;LogFileName=Pi.Runtime.trx" Pi.Runtime.Tests/Pi.Runtime.Tests.csproj
+                '''
+                mstest testResultsFile:"**/*.trx", keepLongStdio: true
+              }
+            }
+        }
+        stage('Smoke Test') {
+            steps {
+              sh 'dotnet ./m3/src/Pi.Web/bin/Debug/netcoreapp3.1/Pi.Web.dll'
+            }
+        }
+    }
 }
